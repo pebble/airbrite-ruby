@@ -2,7 +2,7 @@ module Airbrite
   module Concerns
     module Fetchable
       module ClassMethods
-        def fetch(args)
+        def fetch(args={})
           e = self.new(args)
           e.refresh
           e

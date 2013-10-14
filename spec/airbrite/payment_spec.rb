@@ -26,19 +26,48 @@ describe Airbrite::Payment do
     payment.instance_url.should == "/orders/17/payments/9"
   end
 
-  context '#charge' do
-    pending
-  end
+  context "members" do
+    before do
+      payment.order_id = 123
+      payment._id = 456
+    end
 
-  context '#authorize' do
-    pending
-  end
+    let(:response) { double("response") }
 
-  context '#capture' do
-    pending
-  end
+    context '#charge' do
+      it "replaces its contents with the result of posting to its charge endpoint" do
+        response.should_receive(:data).and_return(payment.to_hash.merge(:status => "charged"))
+        Airbrite::Client.instance.should_receive(:post).with("#{payment.instance_url}/charge").and_return(response)
+        payment.charge
+        payment.status.should == "charged"
+      end
+    end
 
-  context '#refund' do
-    pending
+    context '#authorize' do
+      it "replaces its contents with the result of posting to its authorize endpoint" do
+        response.should_receive(:data).and_return(payment.to_hash.merge(:status => "authorized"))
+        Airbrite::Client.instance.should_receive(:post).with("#{payment.instance_url}/authorize").and_return(response)
+        payment.authorize
+        payment.status.should == "authorized"
+      end
+    end
+
+    context '#capture' do
+      it "replaces its contents with the result of posting to its capture endpoint" do
+        response.should_receive(:data).and_return(payment.to_hash.merge(:status => "captured"))
+        Airbrite::Client.instance.should_receive(:post).with("#{payment.instance_url}/capture").and_return(response)
+        payment.capture
+        payment.status.should == "captured"
+      end
+    end
+
+    context '#refund' do
+      it "replaces its contents with the result of posting to its refund endpoint" do
+        response.should_receive(:data).and_return(payment.to_hash.merge(:status => "refunded"))
+        Airbrite::Client.instance.should_receive(:post).with("#{payment.instance_url}/refund", {:amount => 25}).and_return(response)
+        payment.refund(25)
+        payment.status.should == "refunded"
+      end
+    end
   end
 end

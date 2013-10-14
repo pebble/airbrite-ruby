@@ -13,15 +13,19 @@ module Airbrite
     end
 
     def charge
+      replace Client.instance.post("#{instance_url}/charge").data
     end
 
     def authorize
+      replace Client.instance.post("#{instance_url}/authorize").data
     end
 
     def capture
+      replace Client.instance.post("#{instance_url}/capture").data
     end
 
-    def refund
+    def refund(amount)
+      replace Client.instance.post("#{instance_url}/refund", :amount => amount).data
     end
   end
 end

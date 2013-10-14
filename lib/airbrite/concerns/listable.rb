@@ -3,22 +3,20 @@ module Airbrite
     module Listable
       module ClassMethods
         def list(args={})
-          resp = Client.instance.get collection_url(args), args.slice(:limit, :skip, :sort, :order, :since, :until)
+          resp = Client.instance.get collection_url(args), filters(args)
           resp.data.map! { |d| self.new(d) }
           resp
+        end
 
-          # limit:  optional
-          #         Maximum number of objects to return. Defaults to 100.
-          # skip:   optional
-          #         Number of objects to skip over before returning results
-          # sort:   optional
-          #         Which field to sort by
-          # order:  optional
-          #         Which way to sort (1 or -1 and asc or desc are the same, respectively)
-          # since:  optional
-          #         Matches all items updated after unix timestamp
-          # until:  optional
-          #         Matches all items updated before unix timestamp
+        def filters(args)
+          f = {}
+          f[:limit] = args[:limit].to_i unless args[:limit].nil?
+          f[:skip] = args[:skip].to_i unless args[:skip].nil?
+          f[:sort] = args[:sort].to_s unless args[:skip].nil?
+          f[:order] = args[:order] unless args[:order].nil?
+          f[:since] = args[:since].to_i unless args[:since].nil?
+          f[:until] = args[:until].to_i unless args[:until].nil?
+          f
         end
       end
 

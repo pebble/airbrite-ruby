@@ -1,4 +1,4 @@
 module Airbrite
-  class Metadata < Hashie::Mash
+  class Metadata < Hashie::SafeMash
   end
 end

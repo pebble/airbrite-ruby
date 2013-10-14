@@ -1,5 +1,7 @@
 module Airbrite
-  class Entity < Hashie::Mash
+  class Entity < Hashie::SafeMash
+    include Hashie::Extensions::Coercion
+
     require "airbrite/account"
     require "airbrite/address"
     require "airbrite/card"
@@ -15,33 +17,13 @@ module Airbrite
     require "airbrite/shipping"
     require "airbrite/stripe"
     require "airbrite/tax"
-    require "airbrite/tax_calculation"
-
-    include Hashie::Extensions::Coercion
-
-    coerce_value :address, Address
-    coerce_value :addresses, Address
-    coerce_value :billing_address, Address
-    coerce_value :default_address, Address
-    coerce_value :card, Card
-    coerce_value :cards, Card
-    coerce_value :customer, Customer
-    coerce_value :discount, Discount
-    coerce_value :line_items, LineItem
-    coerce_value :metadata, Metadata
-    coerce_value :payments, Payment
-    coerce_value :shipments, Shipment
-    coerce_value :shipping, Shipping
-    coerce_value :shipping_address, Address
-    coerce_value :stripe, Stripe
-    coerce_value :tax, Tax
 
     class << self
       def coerce(value)
         if value.is_a?(Array)
           value.map { |v| self.new(v) }
         else
-          self.new(v)
+          self.new(value)
         end
       end
 
@@ -55,6 +37,27 @@ module Airbrite
 
       def base_name
         name.split('::').last.downcase
+      end
+    end
+
+    [Account, Address, Card, Customer, Discount, Event, LineItem, Order, Payment, Product, Shipment, Shipping, Stripe, Tax].each do |cls|
+      cls.class_eval do
+        coerce_key :address, Address
+        coerce_key :addresses, Address
+        coerce_key :billing_address, Address
+        coerce_key :default_address, Address
+        coerce_key :card, Card
+        coerce_key :cards, Card
+        coerce_key :customer, Customer
+        coerce_key :discount, Discount
+        coerce_key :line_items, LineItem
+        coerce_key :metadata, Metadata
+        coerce_key :payments, Payment
+        coerce_key :shipments, Shipment
+        coerce_key :shipping, Shipping
+        coerce_key :shipping_address, Address
+        coerce_key :stripe, Stripe
+        coerce_key :tax, Tax
       end
     end
 

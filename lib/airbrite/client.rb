@@ -11,7 +11,7 @@ module Airbrite
     attr_accessor :http_client
 
     def initialize(api_key)
-      self.http_client = Faraday.new "https://api.airbrite.io/v2", :headers => {
+      self.http_client = Faraday.new "https://api.airbrite.io", :headers => {
         "Content-Type"  => "application/json",
         "Authorization" => "Bearer #{api_key}"
       }
@@ -19,19 +19,38 @@ module Airbrite
 
     [:post, :get, :put].each do |method|
       define_method method do |*args, &block|
+        raise Airbrite::MissingApiKey.new if Airbrite::Client.api_key.nil?
+        args[0] = "/v2#{args[0]}"
         resp = handle_errors { self.http_client.send method, *args, &block }
         parse_json resp
       end
     end
 
-  private
-
     def handle_errors
       resp = yield
 
-      # raise on timeout
-      # raise on non 200 response
-      # raise on any other errors
+      return resp if resp.success?
+
+      message = parse_error_message resp
+
+      if resp.status >= 500
+        raise Airbrite::ApiError.new(message, resp.status)
+      elsif resp.status >= 400
+        raise Airbrite::BadRequestError.new(message, resp.status)
+      end
+
+      raise Airbrite::ClientError.new(message, resp.status)
+
+    rescue Faraday::Error::ClientError => e
+      raise Airbrite::ClientError.new(e.class.name)
+    end
+
+    def parse_error_message(resp)
+      json = MultiJson.load(resp.body)
+      meta = json["meta"]
+      "#{meta["error_type"]}: #{meta["error_message"]}"
+    rescue
+      nil
     end
 
     def parse_json(resp)
