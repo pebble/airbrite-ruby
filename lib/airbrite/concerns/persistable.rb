@@ -18,7 +18,7 @@ module Airbrite
           if persisted?
             replace Client.instance.put(instance_url, MultiJson.dump(self)).data
           else
-            replace Client.instance.post(self.class.collection_url, MultiJson.dump(self)).data
+            replace Client.instance.post(self.class.collection_url(self), MultiJson.dump(self)).data
           end
         end
       end
