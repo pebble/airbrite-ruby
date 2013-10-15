@@ -337,6 +337,16 @@ Anything you pass to `[:limit, :skip, :since, :until]` should play nicely with `
 
 You can mix and match them as you please.
 
+### Helpers
+
+#### Persisted?
+
+You can find out if an entity is persisted by asking it, e.g., `order.persisted?`.
+
+#### Refresh
+
+Calling `refresh` on any "fetchable" entity causes it to fetch itself and replace its contents with the response data from Airbrite. Note that any local changes will be lost. The `_id` property must be set in order to refresh properly.
+
 ## Contributing
 
 1. Fork it
