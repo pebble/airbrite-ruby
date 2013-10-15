@@ -347,6 +347,26 @@ You can find out if an entity is persisted by asking it, e.g., `order.persisted?
 
 Calling `refresh` on any "fetchable" entity causes it to fetch itself and replace its contents with the response data from Airbrite. Note that any local changes will be lost. The `_id` property must be set in order to refresh properly.
 
+### Errors
+
+There are 4 exception types that can be raised from all API operations described above.  These are:
+
+```ruby
+# Missing api key:
+Airbrite::MissingApiKey
+
+# 50* http status codes returned from Airbrite:
+Airbrite::ApiError
+
+# 40* http status codes returned from Airbrite:
+Airbrite::BadRequestError
+
+# Misc. HTTP client errors such as timeouts and response parse failures:
+Airbrite::ClientError
+```
+
+All exceptions above inherit from `Airbrite::AirbriteError` and best attempts are made to record useful messages.
+
 ## Contributing
 
 1. Fork it
