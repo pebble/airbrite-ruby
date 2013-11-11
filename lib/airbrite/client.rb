@@ -2,16 +2,17 @@ module Airbrite
   class Client
     class << self
       attr_accessor :api_key
+      attr_accessor :use_staging
 
       def instance
-        @instance ||= self.new(self.api_key)
+        @instance ||= self.new(self.api_key, !!self.use_staging)
       end
     end
 
     attr_accessor :http_client
 
-    def initialize(api_key, production=true)
-      url = production ? "https://api.airbrite.io/v2" : "https://api-staging.airbrite.io"
+    def initialize(api_key, staging=false)
+      url = staging ? "https://api-staging.airbrite.io" : "https://api.airbrite.io/v2"
       self.http_client = Faraday.new url, :headers => {
         "Content-Type"  => "application/json",
         "Authorization" => "Bearer #{api_key}"

@@ -24,4 +24,8 @@ module Airbrite
   def self.api_key=(key)
     Client.api_key = key
   end
+
+  def self.use_staging=(bool)
+    Client.use_staging = bool
+  end
 end
