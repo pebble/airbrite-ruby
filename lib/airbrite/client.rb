@@ -10,8 +10,9 @@ module Airbrite
 
     attr_accessor :http_client
 
-    def initialize(api_key)
-      self.http_client = Faraday.new "https://api.airbrite.io", :headers => {
+    def initialize(api_key, production=true)
+      url = production ? "https://api.airbrite.io/v2" : "https://api-staging.airbrite.io"
+      self.http_client = Faraday.new url, :headers => {
         "Content-Type"  => "application/json",
         "Authorization" => "Bearer #{api_key}"
       }
