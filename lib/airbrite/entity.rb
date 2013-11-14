@@ -11,6 +11,7 @@ module Airbrite
     require "airbrite/line_item"
     require "airbrite/metadata"
     require "airbrite/order"
+    require "airbrite/paging"
     require "airbrite/payment"
     require "airbrite/product"
     require "airbrite/shipment"
@@ -52,6 +53,7 @@ module Airbrite
         coerce_key :discount, Discount
         coerce_key :line_items, LineItem
         coerce_key :metadata, Metadata
+        coerce_key :paging, Paging
         coerce_key :payments, Payment
         coerce_key :shipments, Shipment
         coerce_key :shipping, Shipping
