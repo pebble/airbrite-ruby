@@ -12,7 +12,7 @@ module Airbrite
           f = {}
           f[:limit] = args[:limit].to_i unless args[:limit].nil?
           f[:skip] = args[:skip].to_i unless args[:skip].nil?
-          f[:sort] = args[:sort].to_s unless args[:skip].nil?
+          f[:sort] = args[:sort].to_s unless args[:sort].nil?
           f[:order] = args[:order] unless args[:order].nil?
           f[:since] = args[:since].to_i unless args[:since].nil?
           f[:until] = args[:until].to_i unless args[:until].nil?
