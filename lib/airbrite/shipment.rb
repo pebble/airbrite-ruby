@@ -11,5 +11,9 @@ module Airbrite
     def self.collection_url(args)
       "#{Order.instance_url(args[:order_id])}#{super}"
     end
+
+    def line_items
+      self["line_items"] || []
+    end
   end
 end

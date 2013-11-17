@@ -25,4 +25,8 @@ describe Airbrite::Shipment do
     shipment.order_id = 80
     shipment.instance_url.should == "/orders/80/shipments/56"
   end
+
+  it "provides default list for line_items" do
+    shipment.line_items.should eql([])
+  end
 end
