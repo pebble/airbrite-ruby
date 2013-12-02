@@ -25,7 +25,7 @@ module Airbrite
     end
 
     def refund(amount)
-      replace Client.instance.post("#{instance_url}/refund", :amount => amount).data
+      replace Client.instance.post("#{instance_url}/refund", MultiJson.dump(:amount => amount)).data
     end
   end
 end

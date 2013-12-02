@@ -64,7 +64,7 @@ describe Airbrite::Payment do
     context '#refund' do
       it "replaces its contents with the result of posting to its refund endpoint" do
         response.should_receive(:data).and_return(payment.to_hash.merge(:status => "refunded"))
-        Airbrite::Client.instance.should_receive(:post).with("#{payment.instance_url}/refund", {:amount => 25}).and_return(response)
+        Airbrite::Client.instance.should_receive(:post).with("#{payment.instance_url}/refund", MultiJson.dump({:amount => 25})).and_return(response)
         payment.refund(25)
         payment.status.should == "refunded"
       end
