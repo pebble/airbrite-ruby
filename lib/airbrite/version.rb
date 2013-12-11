@@ -1,3 +1,3 @@
 module Airbrite
-  VERSION = "0.0.1.alpha10"
+  VERSION = "0.0.1.alpha11"
 end
