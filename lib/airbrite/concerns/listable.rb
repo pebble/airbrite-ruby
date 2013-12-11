@@ -3,8 +3,8 @@ module Airbrite
     module Listable
       module ClassMethods
         def find_each(args={})
-          i = 0
           limit = args[:limit] || 250
+          i = args[:skip] ? (args[:skip].to_i / limit.to_f).floor : 0
           loop do
             resp = list args.merge(limit: limit, skip: i * limit, order: 1, sort: :created_at)
             resp.data.each { |d| yield d }
